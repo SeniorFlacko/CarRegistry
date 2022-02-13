@@ -1,0 +1,32 @@
+<form [formGroup]="form">
+  <ng-container *ngIf="dropdown$ | async as selectedScreen">
+    <h4>mat-select</h4>
+    <mat-form-field appearance="fill">
+      <mat-label>Select Area</mat-label>
+      <mat-select
+        [formControl]="screenControl"
+        [ngModel]="selectedScreen"
+        name="screen"
+      >
+        <mat-option *ngFor="let screen of screens" [value]="screen.value">
+          {{ screen.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div>SELECTEDSCREEN: {{ selectedScreen }}</div>
+  </ng-container>
+  <p>Selected: {{ screenControl.value }}</p>
+</form>
+<div>Current Dropdown State: {{ dropdown$ | async }}</div>
+
+<ng-container *ngIf="dropdown$ | async as selectedScreen">
+  <ng-container [ngSwitch]="selectedScreen">
+    <ng-container *ngSwitchCase="'CAR_REGISTRY'">
+      <app-car-registry-view></app-car-registry-view>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ADD_CAR'">
+      <app-carr-registry-form></app-carr-registry-form>
+    </ng-container>
+    <ng-container *ngSwitchDefault>...</ng-container>
+  </ng-container>
+</ng-container>
