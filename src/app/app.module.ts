@@ -13,6 +13,9 @@ import { SharedModule } from './shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+import { carReducer } from './reducers/car.reducers';
+import { CarEffect } from './effects/car.effects';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,8 +30,9 @@ import { environment } from '../environments/environment';
     SharedModule,
     ReactiveFormsModule,
     FormsModule,
-    StoreModule.forRoot({ dropdown: dropdownReducer }),
+    StoreModule.forRoot({ dropdown: dropdownReducer, cars: carReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25 }),
+    EffectsModule.forRoot([CarEffect]),
   ],
   providers: [],
   bootstrap: [AppComponent],

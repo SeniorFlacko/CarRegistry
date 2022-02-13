@@ -1,6 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
+import { addCar } from '../actions/car.actions';
+import { Car } from '../shared/models/car.model';
 
 @Component({
   selector: 'app-carr-registry-form',
@@ -22,19 +25,23 @@ export class CarrRegistryFormComponent implements OnInit, OnDestroy {
     { value: 'blue', viewValue: 'Blue' },
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store: Store) {
     this.form = this.fb.group({
-      type: ['', Validators.required],
+      vehicleType: ['', Validators.required],
       model: ['', Validators.required],
       color: ['', Validators.required],
       licenceNumber: ['', Validators.required],
-      owner: [''],
+      ownerName: [''],
       capacity: [''],
     });
   }
 
   ngOnInit(): void {
     this.setValidatorRequired();
+  }
+
+  addCar(car: Car) {
+    this.store.dispatch(addCar(car));
   }
 
   setValidatorRequired() {
@@ -55,5 +62,10 @@ export class CarrRegistryFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+  }
+
+  onSubmit() {
+    const car: Car = this.form.value;
+    this.addCar(car);
   }
 }

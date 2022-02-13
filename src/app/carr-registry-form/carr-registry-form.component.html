@@ -1,74 +1,81 @@
-<form [formGroup]="form">
-  <mat-form-field appearance="fill">
-    <mat-label>Type</mat-label>
-    <mat-select formControlName="type" name="screen">
-      <mat-option *ngFor="let type of types" [value]="type.value">
-        {{ type.viewValue }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="container">
+  <h1>Add Car Form</h1>
+  <form [formGroup]="form">
+    <div>
+      <mat-form-field appearance="fill">
+        <mat-label>Type</mat-label>
+        <mat-select formControlName="vehicleType" name="screen">
+          <mat-option *ngFor="let type of types" [value]="type.value">
+            {{ type.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Model</mat-label>
-    <input
-      type="text"
-      autocomplete="off"
-      formControlName="model"
-      matInput
-      placeholder="Ex. Mazda"
-    />
-  </mat-form-field>
+    <div>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Model</mat-label>
+        <input
+          type="text"
+          autocomplete="off"
+          formControlName="model"
+          matInput
+          placeholder="Ex. Mazda"
+        />
+      </mat-form-field>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Color</mat-label>
-    <mat-select formControlName="color" name="screen">
-      <mat-option *ngFor="let color of colors" [value]="color.value">
-        {{ color.viewValue }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Color</mat-label>
+        <mat-select formControlName="color" name="screen">
+          <mat-option *ngFor="let color of colors" [value]="color.value">
+            {{ color.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Licence Number</mat-label>
+        <input
+          type="text"
+          autocomplete="off"
+          formControlName="licenceNumber"
+          matInput
+        />
+      </mat-form-field>
 
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Licence Number</mat-label>
-    <input
-      type="text"
-      autocomplete="off"
-      formControlName="licenceNumber"
-      matInput
-      placeholder="Ex. Mazda"
-    />
-  </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Owner</mat-label>
+        <input
+          type="text"
+          autocomplete="off"
+          formControlName="ownerName"
+          matInput
+        />
+      </mat-form-field>
+    </div>
 
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Owner</mat-label>
-    <input
-      type="text"
-      autocomplete="off"
-      formControlName="owner"
-      matInput
-      placeholder="Ex. Mazda"
-    />
-  </mat-form-field>
+    <div>
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Capacity</mat-label>
+        <input
+          type="text"
+          autocomplete="off"
+          formControlName="capacity"
+          matInput
+        />
+      </mat-form-field>
+    </div>
 
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Capacity</mat-label>
-    <input
-      type="text"
-      autocomplete="off"
-      formControlName="capacity"
-      matInput
-      placeholder="Ex. Mazda"
-    />
-  </mat-form-field>
-
-  <button mat-raised-button color="primary" [disabled]="form.invalid">
-    Primary
-  </button>
-</form>
-
-<pre>
-
-  {{ form.value | json }}
-
-  {{ form.valid | json }}
-</pre>
+    <div>
+      <button
+        (click)="onSubmit()"
+        mat-raised-button
+        color="primary"
+        [disabled]="form.invalid"
+      >
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

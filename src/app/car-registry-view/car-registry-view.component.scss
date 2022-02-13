@@ -1,0 +1,18 @@
+.container {
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 35px;
+}
+
+mat-form-field {
+  display: flex;
+}
+
+table {
+  width: 50%;
+}
+
+th,
+tr {
+  text-align: center !important;
+}

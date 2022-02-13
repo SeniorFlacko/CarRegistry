@@ -1,20 +1,16 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Store } from '@ngrx/store';
+import { Subject, takeUntil } from 'rxjs';
+import { getCars } from '../actions/car.actions';
+import { CarState } from '../reducers/car.reducers';
+import { Car } from '../shared/models/car.model';
 
 export interface PeriodicElement {
   name?: string;
   position?: number;
   weight?: number;
   symbol?: string;
-}
-
-export interface Car {
-  type?: string;
-  model?: string;
-  color?: string;
-  licenceNumber?: string;
-  ownerName?: string;
-  capacity?: string;
 }
 
 const BACKUP_DATA: PeriodicElement[] = [
@@ -32,7 +28,7 @@ const BACKUP_DATA: PeriodicElement[] = [
 
 const TDATA: Car[] = [
   {
-    type: 'CAR',
+    vehicleType: 'CAR',
     model: 'MAZDA CX-5',
     color: 'red',
     licenceNumber: '7979DASA',
@@ -40,7 +36,7 @@ const TDATA: Car[] = [
     capacity: 'n/a',
   },
   {
-    type: 'TRUCK',
+    vehicleType: 'TRUCK',
     model: 'VOLVO AGT-M',
     color: 'white',
     licenceNumber: 'DAJHDA889',
@@ -56,21 +52,53 @@ const TDATA: Car[] = [
 })
 export class CarRegistryViewComponent implements OnInit {
   displayedColumns: string[] = [
-    'type',
+    'vehicleType',
     'model',
     'color',
     'licenceNumber',
     'ownerName',
     'capacity',
   ];
-  columnsToDisplay: string[] = ['type', 'model', 'color', 'licenceNumber'];
+  columnsToDisplay: string[] = [
+    'vehicleType',
+    'model',
+    'color',
+    'licenceNumber',
+  ];
   ELEMENT_DATA_SOURCE = this.getBasicViewData().slice();
   dataSource = new MatTableDataSource(this.ELEMENT_DATA_SOURCE);
   view: string = 'basic-view';
 
-  constructor() {}
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
-  ngOnInit(): void {}
+  car$ = this.store.select('cars');
+
+  constructor(private store: Store<CarState>) {}
+
+  ngOnInit(): void {
+    this.getAllCars();
+
+    this.car$.pipe(takeUntil(this.destroy$)).subscribe((cars) => {
+      if (this.view === 'basic-view') {
+        this.columnsToDisplay = [
+          'vehicleType',
+          'model',
+          'color',
+          'licenceNumber',
+        ];
+        this.ELEMENT_DATA_SOURCE = [...cars];
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA_SOURCE);
+      } else {
+        this.ELEMENT_DATA_SOURCE = [...cars];
+        this.dataSource = new MatTableDataSource(this.ELEMENT_DATA_SOURCE);
+        this.columnsToDisplay = this.displayedColumns.slice();
+      }
+    });
+  }
+
+  getAllCars() {
+    this.store.dispatch(getCars({ basic: true }));
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -78,7 +106,7 @@ export class CarRegistryViewComponent implements OnInit {
   }
 
   renderBasicView() {
-    this.columnsToDisplay = ['type', 'model', 'color', 'licenceNumber'];
+    this.columnsToDisplay = ['vehicleType', 'model', 'color', 'licenceNumber'];
     this.ELEMENT_DATA_SOURCE = this.getBasicViewData().slice();
     this.dataSource = new MatTableDataSource(this.ELEMENT_DATA_SOURCE);
   }
@@ -92,13 +120,13 @@ export class CarRegistryViewComponent implements OnInit {
   getBasicViewData(): Car[] {
     return [
       {
-        type: 'CAR',
+        vehicleType: 'CAR',
         model: 'MAZDA CX-5',
         color: 'red',
         licenceNumber: '7979DASA',
       },
       {
-        type: 'TRUCK',
+        vehicleType: 'TRUCK',
         model: 'VOLVO AGT-M',
         color: 'white',
         licenceNumber: 'DAJHDA889',
@@ -109,7 +137,7 @@ export class CarRegistryViewComponent implements OnInit {
   getExtendedViewData(): Car[] {
     return [
       {
-        type: 'CAR',
+        vehicleType: 'CAR',
         model: 'MAZDA CX-5',
         color: 'red',
         licenceNumber: '7979DASA',
@@ -117,7 +145,7 @@ export class CarRegistryViewComponent implements OnInit {
         capacity: 'n/a',
       },
       {
-        type: 'TRUCK',
+        vehicleType: 'TRUCK',
         model: 'VOLVO AGT-M',
         color: 'white',
         licenceNumber: 'DAJHDA889',
@@ -129,9 +157,14 @@ export class CarRegistryViewComponent implements OnInit {
 
   onSelect($event: any) {
     if ($event.value === 'basic-view') {
-      this.renderBasicView();
+      this.store.dispatch(getCars({ basic: true }));
     } else {
-      this.renderExtendedView();
+      this.store.dispatch(getCars({ basic: false }));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 }
