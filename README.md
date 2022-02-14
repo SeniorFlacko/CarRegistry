@@ -5,3 +5,5 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Live Demo
 
 ## https://seniorflacko.github.io/CarRegistry/
+
+![img](https://github.com/SeniorFlacko/CarRegistry/blob/main/demo.gif)
