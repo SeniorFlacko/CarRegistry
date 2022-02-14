@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subject, takeUntil } from 'rxjs';
+import Swal from 'sweetalert2';
 import { addCar } from '../actions/car.actions';
+import { carRegistry } from '../actions/dropdown.actions';
 import { Car } from '../shared/models/car.model';
 
 @Component({
@@ -67,5 +69,8 @@ export class CarrRegistryFormComponent implements OnInit, OnDestroy {
   onSubmit() {
     const car: Car = this.form.value;
     this.addCar(car);
+    Swal.fire('Good job!', 'Car has been saved!', 'success');
+
+    this.store.dispatch(carRegistry());
   }
 }
