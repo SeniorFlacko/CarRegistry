@@ -48,7 +48,7 @@ export class CarrRegistryFormComponent implements OnInit, OnDestroy {
 
   setValidatorRequired() {
     this.form
-      ?.get('type')
+      ?.get('vehicleType')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe((type: 'CAR' | 'TRUCK') => {
         if (type === 'TRUCK') {
